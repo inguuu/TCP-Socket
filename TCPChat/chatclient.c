@@ -13,6 +13,7 @@ unsigned WINAPI SendMsg(void * arg);
 unsigned WINAPI RecvMsg(void * arg);
 void ErrorHandling(char * msg);
 int recvn(SOCKET s, char *buf, int len, int flags);
+
 char name[NAME_SIZE] = "[DEFAULT]";
 char msg[BUF_SIZE];
 char nickname[20] = "";
@@ -48,7 +49,6 @@ int main(int argc, char *argv[])
 	WaitForSingleObject(hRcvThread, INFINITE);
 	closesocket(hSock);
 	WSACleanup();
-
 	return 0;
 }
 
@@ -71,10 +71,8 @@ unsigned WINAPI SendMsg(void * arg)   // send thread main
 			strcpy(filename, strtok(NULL, " ,\n"));
 			strcpy(filename, strtok(NULL, " ,\n"));
 			FILE *fp = fopen(filename, "rb");
-
 			if (fp == NULL) {
-				printf("Àü¼ÛÇÒ ÆÄÀÏ ¾øÀ½.\n");
-
+				printf("ì „ì†¡í•  íŒŒì¼ ì—†ìŠµë‹ˆë‹¤.\n");
 			}
 			else {
 				fseek(fp, 0, SEEK_END);      // go to the end of file
@@ -86,8 +84,8 @@ unsigned WINAPI SendMsg(void * arg)   // send thread main
 				int numread;
 				int retval;
 				int numtotal = 0;
-				// ÆÄÀÏ µ¥ÀÌÅÍ º¸³»±â
-				rewind(fp); // ÆÄÀÏ Æ÷ÀÎÅÍ¸¦ Á¦ÀÏ ¾ÕÀ¸·Î ÀÌµ¿
+				
+				rewind(fp); 
 				while (1) {
 					numread = fread(buf, 1, BUF_SIZE, fp);
 					if (numread > 0) {
@@ -102,7 +100,7 @@ unsigned WINAPI SendMsg(void * arg)   // send thread main
 						break;
 					}
 					else {
-						perror("ÆÄÀÏ ÀÔÃâ·Â ¿À·ù");
+						perror("ìž…ì¶œë ¥ ");
 						break;
 					}
 				}
@@ -143,7 +141,7 @@ unsigned WINAPI RecvMsg(void * arg)   // read thread main
 				numtotal += retval;
 				fwrite(buf, 1, retval, fp);
 				if (numtotal == totalbytes) {
-					printf("-> ÆÄÀÏ ¹Þ±â ¿Ï·á!\n");
+					printf("-> íŒŒì¼ ë°›ê¸° ì™„ë£Œ!\n");
 					break;
 				}
 			}
